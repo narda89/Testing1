@@ -3,6 +3,8 @@ package it.euris.ires;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -66,4 +68,72 @@ class CalculatorTest {
         // assert
         assertEquals(expectedResult, result, String.format("%s / %s should equal %s", numberA, numberB, expectedResult));
     }
+
+
+    @ParameterizedTest(name = "GivenFirstArgument {0} AndSecondArgument {1} WhenAddThenShouldReturn {2}")
+    @CsvSource({
+            "0,1,1",
+            "0,-1,-1",
+            "-50,50,0",
+            Integer.MAX_VALUE +", "+ Integer.MAX_VALUE +", -2"
+    })
+    void addWithBvaValues(int first, int second, int expectedResult) {
+        //Calculator calculator = new Calculator();
+        assertEquals(expectedResult, calculator.add(first, second),
+                () -> first +" 0 "+ second +" should equal "+ expectedResult );
+    }
+
+    @ParameterizedTest(name = "GivenFirstArgument {0} AndSecondArgument {1} WhenSubtractThenShouldReturn {2}")
+    @CsvSource({
+            "0,1,-1",
+            "0,-1,1",
+            Integer.MAX_VALUE +", "+ Integer.MAX_VALUE +", 0",
+            Integer.MAX_VALUE +", "+ Integer.MIN_VALUE +", -1",
+            Integer.MIN_VALUE +", 1, "+ Integer.MAX_VALUE
+    })
+    void subWithBvaValues(int first, int second, int expectedResult) {
+        //Calculator calculator = new Calculator();
+        assertEquals(expectedResult, calculator.subtract(first, second),
+                () -> first +" 0 "+ second +" should equal "+ expectedResult );
+    }
+
+    @ParameterizedTest(name = "GivenFirstArgument {0} AndSecondArgument {1} WhenMultiplyThenShouldReturn {2}")
+    @CsvSource({
+            "0,1,0",
+            "1,0,0",
+            "2,3,6",
+            "1,-1,-1",
+            "-1,1,-1",
+            "-1,-1,1",
+            Integer.MAX_VALUE +", "+ Integer.MAX_VALUE +", 0",
+            Integer.MIN_VALUE +", "+ Integer.MIN_VALUE +", 0", // ok, oscilla tra 0 ( * 2k) e MIN_VALUE ( * 2k+1)
+            Integer.MIN_VALUE +", 3,0",
+            Integer.MIN_VALUE +", 4,0",
+            Integer.MIN_VALUE +", 5,0",
+            Integer.MIN_VALUE +", 6,0",
+            Integer.MIN_VALUE +", 1, "+ Integer.MAX_VALUE
+    })
+    void multiplyWithBvaValues(int first, int second, int expectedResult) {
+        //Calculator calculator = new Calculator();
+        assertEquals(expectedResult, calculator.multiply(first, second),
+                () -> first +" 0 "+ second +" should equal "+ expectedResult );
+    }
+
+    @ParameterizedTest(name = "GivenFirstArgument {0} AndSecondArgument {1} WhenDivideThenShouldReturn {2}")
+    @CsvSource({
+            "0,1,0",
+            "0,-1,0",
+            "1,-1,-1",
+            "-1,-1,1",
+            Integer.MAX_VALUE +", 1, "+ Integer.MAX_VALUE,
+            Integer.MIN_VALUE +", 1, "+ Integer.MIN_VALUE,
+            Integer.MIN_VALUE +", "+ Integer.MAX_VALUE +", -1",
+    })
+    void divideWithBvaValues(int first, int second, int expectedResult) {
+        //Calculator calculator = new Calculator();
+        assertEquals(expectedResult, calculator.divide(first, second),
+                () -> first +" 0 "+ second +" should equal "+ expectedResult );
+    }
+
+
 }
